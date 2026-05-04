@@ -9,6 +9,7 @@ endif()
 include(cmake/CPM_0.42.1.cmake)
 
 
+set(CPM_otfccxx_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/otfccxx)
 CPMAddPackage(
     URI "gh:InCom-0/otfccxx#vendoring"
     OPTIONS "otfccxx_BUILD_SHARED_LIB ${incplot-lib_BUILD_SHARED_LIB}"
