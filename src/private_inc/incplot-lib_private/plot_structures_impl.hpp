@@ -1392,14 +1392,16 @@ auto BarHM::compute_labels_hb(this auto &&self) -> compute_rt<decltype(self)> {
         }
         else { static_assert(false); } // This should never be instantiated
 
-        for (size_t startOffset = 0; auto &res_oneLine : self.labels_horBottom) {
+        for (size_t charOffset = 0; auto &res_oneLine : self.labels_horBottom) {
             for (auto const &tmpLine : tmpHolder) {
                 res_oneLine.append(label_startHorPos, Config::space);
-                res_oneLine.append(tmpLine.begin() + startOffset, tmpLine.begin() + startOffset + labelWidth);
+                size_t const byteStart = detail::conv_utf8CharCount_to_charCount(tmpLine, charOffset);
+                size_t const byteEnd   = detail::conv_utf8CharCount_to_charCount(tmpLine, charOffset + labelWidth);
+                res_oneLine.append(tmpLine.begin() + byteStart, tmpLine.begin() + byteEnd);
                 res_oneLine.append(label_startHorPos + 1 + doubleSpace - negAdjust, Config::space);
             }
             if (doubleSpace) { res_oneLine.pop_back(); }
-            startOffset += labelWidth;
+            charOffset += labelWidth;
         }
     };
     std::visit(computeLabels, self.labelTS_data.value());
